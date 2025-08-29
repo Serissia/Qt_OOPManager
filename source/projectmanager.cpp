@@ -7,6 +7,7 @@ projectManager::projectManager()
 {
 	m_number = 0;
 	classes.clear();
+	m_id.clear();
 }
 
 projectManager::~projectManager()
@@ -18,6 +19,7 @@ void projectManager::addClass(const classInfo &newClass)
 {
 	classes.append(newClass);
 	++m_number;
+	m_id.insert(newClass.getID());
 	qDebug() << "Add a Class(ID:" << newClass.getID() << ")\n";
 }
 
@@ -28,6 +30,7 @@ bool projectManager::removeClass(const int id)
 		{
 			classes.removeAt(i);
 			--m_number;
+			m_id.remove(id);
 			qDebug() << "Remove a Class(ID:" << id << ")\n";
 			return true;
 		}
@@ -78,10 +81,15 @@ bool projectManager::readClassFromFile(const QString &readFileName)
 		for(int i = 0; i < m_number; ++i)
 		{
 			tmpClass.readClass(in);
-			classes.append(tmpClass);
+			addClass(tmpClass);
 		}
 
 	file.close();
 	qDebug() << readFileName << endl;
 	return true;
+}
+
+QSet<int>& projectManager::getAllId()
+{
+	return m_id;
 }

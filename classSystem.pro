@@ -12,6 +12,7 @@ SOURCES += \
     source/classinfo.cpp \
     source/classmemberinfo.cpp \
     main.cpp \
+    source/invalidinputdialog.cpp \
     source/mainwindow.cpp \
     source/newclassdialog.cpp \
     source/projectmanager.cpp
@@ -19,11 +20,13 @@ SOURCES += \
 HEADERS += \
     header/classinfo.h \
     header/classmemberinfo.h \
+    header/invalidinputdialog.h \
     header/mainwindow.h \
     header/newclassdialog.h \
     header/projectmanager.h
 
 FORMS += \
+    invalidinputdialog.ui \
     mainwindow.ui \
     newclassdialog.ui
 

@@ -25,7 +25,7 @@
    <property name="orientation">
     <enum>Qt::Horizontal</enum>
    </property>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <layout class="QVBoxLayout" name="verticalLayout_2">
      <property name="spacing">
       <number>18</number>
@@ -74,7 +74,7 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <layout class="QVBoxLayout" name="verticalLayout">
      <property name="spacing">
       <number>18</number>
@@ -87,7 +87,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QLineEdit" name="lineBase"/>
+      <widget class="QDateEdit" name="dateEdit"/>
      </item>
      <item>
       <widget class="QLineEdit" name="lineClass"/>
@@ -96,7 +96,7 @@
       <widget class="QLineEdit" name="lineFunc"/>
      </item>
      <item>
-      <widget class="QDateEdit" name="dateEdit"/>
+      <widget class="QLineEdit" name="lineBase"/>
      </item>
      <item>
       <widget class="QLineEdit" name="lineAuth"/>
@@ -104,7 +104,7 @@
     </layout>
    </widget>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>70</x>

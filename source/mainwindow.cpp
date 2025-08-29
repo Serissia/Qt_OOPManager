@@ -42,7 +42,7 @@ void MainWindow::on_actionSave_triggered()
 
 void MainWindow::on_actionNew_triggered()
 {
-	newClassDialog dlgNew(this);
+	newClassDialog dlgNew(this, m_InfoManager.getAllId());
 	int ret = dlgNew.exec();//展示模态的新增类对话框
 	if(ret == QDialog::Accepted)
 	{
