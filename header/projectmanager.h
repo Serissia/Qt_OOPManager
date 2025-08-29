@@ -15,6 +15,7 @@ public:
 	int getNumber()const;
 	classInfo* findClassById(const int classId);//按id查找classInfo
 	QSet<int>& getAllId();
+	classInfo& getClassInfoByRow(const int row);
 
 	bool saveClassToFile(const QString &saveFileName);
 	bool readClassFromFile(const QString &readFileName);

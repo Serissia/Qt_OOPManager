@@ -15,6 +15,11 @@ projectManager::~projectManager()
 
 }
 
+int projectManager::getNumber() const
+{
+	return m_number;
+}
+
 void projectManager::addClass(const classInfo &newClass)
 {
 	classes.append(newClass);
@@ -92,4 +97,9 @@ bool projectManager::readClassFromFile(const QString &readFileName)
 QSet<int>& projectManager::getAllId()
 {
 	return m_id;
+}
+
+classInfo& projectManager::getClassInfoByRow(const int row)
+{
+	return classes[row];
 }

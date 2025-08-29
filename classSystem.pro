@@ -15,7 +15,8 @@ SOURCES += \
     source/invalidinputdialog.cpp \
     source/mainwindow.cpp \
     source/newclassdialog.cpp \
-    source/projectmanager.cpp
+    source/projectmanager.cpp \
+    source/readonlydelegate.cpp
 
 HEADERS += \
     header/classinfo.h \
@@ -23,7 +24,8 @@ HEADERS += \
     header/invalidinputdialog.h \
     header/mainwindow.h \
     header/newclassdialog.h \
-    header/projectmanager.h
+    header/projectmanager.h \
+    header/readonlydelegate.h
 
 FORMS += \
     invalidinputdialog.ui \

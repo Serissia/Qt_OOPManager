@@ -16,6 +16,11 @@ public:
 
 	/*相关private成员读写*/
 	int getID()const;
+	QString getName()const;
+	QString getBaseName()const;
+	QString getFunction()const;
+	QString getDate()const;
+	QString getAuthor()const;
 	void setId(int id);
 	void setName(QString name);
 	void setBaseName(QString baseName);

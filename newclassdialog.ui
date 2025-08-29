@@ -26,7 +26,7 @@
     <enum>Qt::Horizontal</enum>
    </property>
    <widget class="QWidget" name="layoutWidget">
-    <layout class="QVBoxLayout" name="verticalLayout_2">
+    <layout class="QVBoxLayout" name="Inputs">
      <property name="spacing">
       <number>18</number>
      </property>
@@ -75,19 +75,36 @@
     </layout>
    </widget>
    <widget class="QWidget" name="layoutWidget">
-    <layout class="QVBoxLayout" name="verticalLayout">
+    <layout class="QVBoxLayout" name="Texts">
      <property name="spacing">
       <number>18</number>
      </property>
      <item>
       <widget class="QSpinBox" name="spinBox">
+       <property name="maximum">
+        <number>2147483647</number>
+       </property>
        <property name="value">
         <number>0</number>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QDateEdit" name="dateEdit"/>
+      <widget class="QDateEdit" name="dateEdit">
+       <property name="dateTime">
+        <datetime>
+         <hour>23</hour>
+         <minute>59</minute>
+         <second>59</second>
+         <year>1999</year>
+         <month>12</month>
+         <day>31</day>
+        </datetime>
+       </property>
+       <property name="displayFormat">
+        <string>yyyy/M/d</string>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QLineEdit" name="lineClass"/>
@@ -113,7 +130,7 @@
      <height>22</height>
     </rect>
    </property>
-   <layout class="QHBoxLayout" name="horizontalLayout">
+   <layout class="QHBoxLayout" name="OkAndCancel">
     <property name="spacing">
      <number>60</number>
     </property>

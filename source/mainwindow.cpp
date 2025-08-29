@@ -10,6 +10,20 @@ MainWindow::MainWindow(QWidget *parent)
 {
 	ui->setupUi(this);
 	setWindowTitle(tr("面向对象程序项目管理系统"));//设置主页面标题
+
+	tableView = new QTableView(this);
+	defaultDelegate = new QStyledItemDelegate(this);
+	readOnlyDelegate = new ReadOnlyDelegate(this);
+	model = new QStandardItemModel(this);
+
+	tableView->setSelectionMode(QAbstractItemView::SingleSelection); // 设置单行选择模式
+	tableView->setSelectionBehavior(QAbstractItemView::SelectItems); // 设置选择行为为单元格
+	tableView->setModel(model);
+	setCentralWidget(tableView);
+
+	// 页面修改数据同步vector
+	connect(defaultDelegate, &QAbstractItemDelegate::closeEditor, this, &MainWindow::tableViewUpdate);
+
 }
 
 MainWindow::~MainWindow()
@@ -26,7 +40,7 @@ void MainWindow::on_actionOpen_triggered()
 													curPath, fileFilter);
 	if(fileName.isEmpty()) return;
 	m_InfoManager.readClassFromFile(fileName);
-
+	showClassInfoTable();
 }
 
 void MainWindow::on_actionSave_triggered()
@@ -54,5 +68,39 @@ void MainWindow::on_actionNew_triggered()
 		tmpClass.setId(dlgNew.number());
 		tmpClass.setName(dlgNew.className());
 		m_InfoManager.addClass(tmpClass);
+		showClassInfoTable();
 	}
+}
+
+void MainWindow::showClassInfoTable()
+{
+	model->clear();
+	model->setColumnCount(7);
+	int rowNum = m_InfoManager.getNumber();
+	model->setRowCount(rowNum);//设置行列数
+
+	for(int j = 0; j < 7; ++j)
+		tableView->setItemDelegateForColumn(j, defaultDelegate);
+	tableView->setItemDelegateForColumn(0, readOnlyDelegate);//除第一列外可修改
+
+	QStringList header;
+	header << "编号" << "类成员" << "类名" << "基类名" << "功能" << "创建日期" << "作者";
+	model->setHorizontalHeaderLabels(header);//设置表头
+
+	for(int i = 0; i < rowNum; ++i)//设置相关数据
+	{
+		classInfo tmpClass = m_InfoManager.getClassInfoByRow(i);
+		model->setItem(i, 0, new QStandardItem(QString::number(tmpClass.getID())));
+		model->setItem(i, 1, new QStandardItem(tmpClass.getName()));
+		model->setItem(i, 2, new QStandardItem(tr("[点击详情]")));
+		model->setItem(i, 3, new QStandardItem(tmpClass.getBaseName()));
+		model->setItem(i, 4, new QStandardItem(tmpClass.getFunction()));
+		model->setItem(i, 5, new QStandardItem(tmpClass.getDate()));
+		model->setItem(i, 6, new QStandardItem(tmpClass.getName()));
+	}
+}
+
+void MainWindow::tableViewUpdate()
+{
+
 }

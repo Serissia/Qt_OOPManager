@@ -9,6 +9,10 @@ newClassDialog::newClassDialog(QWidget *parent, const QSet<int>& dataSet) :
 {
 	ui->setupUi(this);
 	setWindowTitle(tr("新建类"));
+
+	ui->dateEdit->setDisplayFormat("yyyy/M/d");//设置日期格式
+	ui->dateEdit->setDateTime(QDateTime::currentDateTime());//默认显示系统时间
+	ui->dateEdit->setCalendarPopup(true);//以弹出日历模式更改时间
 }
 
 newClassDialog::~newClassDialog()

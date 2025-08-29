@@ -3,6 +3,10 @@
 
 #include <QMainWindow>
 #include <header/projectmanager.h>
+#include <QTableView>
+#include <header/readonlydelegate.h>
+#include <QStyledItemDelegate>
+#include <QStandardItemModel>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -15,6 +19,7 @@ class MainWindow : public QMainWindow
 public:
 	MainWindow(QWidget *parent = nullptr);
 	~MainWindow();
+	void showClassInfoTable();//展示所有classInfo
 
 private slots:
 	void on_actionOpen_triggered();//打开文件按钮
@@ -23,8 +28,15 @@ private slots:
 
 	void on_actionNew_triggered();//新建类按钮
 
+	void tableViewUpdate();//在页面上修改后更新
+
 private:
 	Ui::MainWindow *ui;
 	projectManager m_InfoManager;
+
+	QTableView *tableView;
+	QStyledItemDelegate *defaultDelegate;
+	ReadOnlyDelegate *readOnlyDelegate;
+	QStandardItemModel *model;
 };
 #endif // MAINWINDOW_H

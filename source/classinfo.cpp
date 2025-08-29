@@ -39,6 +39,31 @@ int classInfo::getID() const
 	return m_id;
 }
 
+QString classInfo::getAuthor() const
+{
+	return m_author;
+}
+
+QString classInfo::getBaseName() const
+{
+	return m_baseName;
+}
+
+QString classInfo::getDate() const
+{
+	return m_date.toString("yyyy/M/d");
+}
+
+QString classInfo::getFunction() const
+{
+	return m_function;
+}
+
+QString classInfo::getName() const
+{
+	return m_name;
+}
+
 void classInfo::setId(int id)
 {
 	m_id = id;
@@ -100,7 +125,7 @@ classMemberInfo* classInfo::findMemberById(const int memberId)
 void classInfo::saveClass(QTextStream &outStream)
 {
 	outStream << m_id <<"\n"<< m_name <<"\n"<< m_baseName <<"\n"
-			  << m_function <<"\n"<< m_date.toString("yyyy/MM/dd") <<"\n"<< m_author;
+			  << m_function <<"\n"<< m_date.toString("yyyy/M/d") <<"\n"<< m_author;
 	outStream <<"\n"<< members.size() <<endl;
 	for(auto i:members)
 		i.saveClassMember(outStream);
@@ -110,7 +135,7 @@ void classInfo::readClass(QTextStream &inStream)
 {
 	QString tmpDate;
 	inStream >> m_id >> m_name >> m_baseName >> m_function >> tmpDate >> m_author;
-	m_date = QDate::fromString(tmpDate, "yyyy/MM/dd");//额外进行转换
+	m_date = QDate::fromString(tmpDate, "yyyy/M/d");//额外进行转换
 	int memSize = 0;
 	inStream >> memSize;
 	classMemberInfo tmpMember;
