@@ -155,8 +155,11 @@ classMemberInfo* classInfo::findMemberById(const int memberId)
 
 void classInfo::saveClass(QTextStream &outStream)
 {
-	outStream << m_id <<"\n"<< m_name <<"\n"<< m_baseName <<"\n"
-			  << m_function <<"\n"<< m_date.toString("yyyy/M/d") <<"\n"<< m_author;
+	outStream << m_id <<"\n"<< (m_name.isEmpty() ? "&" : m_name) <<"\n"
+			  << (m_baseName.isEmpty() ? "&" : m_baseName) <<"\n"
+			  << (m_function.isEmpty() ? "&" : m_function) <<"\n"
+			  << m_date.toString("yyyy/M/d") <<"\n"
+			  << (m_author.isEmpty() ? "&" : m_author);
 	outStream <<"\n"<< members.size() <<endl;
 	for(auto i:members)
 		i.saveClassMember(outStream);
@@ -164,8 +167,12 @@ void classInfo::saveClass(QTextStream &outStream)
 
 void classInfo::readClass(QTextStream &inStream)
 {
-	QString tmpDate;
+	QString tmpDate, placeHolder = "&";
 	inStream >> m_id >> m_name >> m_baseName >> m_function >> tmpDate >> m_author;
+	if(m_name == placeHolder) m_name.clear();
+	if(m_baseName == placeHolder) m_baseName.clear();
+	if(m_function == placeHolder) m_function.clear();
+	if(m_author == placeHolder) m_author.clear();
 	m_date = QDate::fromString(tmpDate, "yyyy/M/d");//额外进行转换
 	int memSize = 0;
 	inStream >> memSize;

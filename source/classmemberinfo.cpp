@@ -115,11 +115,15 @@ void classMemberInfo::setSize(int size)
 
 void classMemberInfo::saveClassMember(QTextStream &outStream)
 {
-	outStream << m_id <<' '<< m_name <<' '<< m_memberType <<' '
-			  << m_size <<' '<< m_dataType <<' '<< m_access <<endl;
+	outStream << m_id <<' '<< (m_name.isEmpty() ? "&" : m_name) <<' '
+			  << m_memberType <<' '<< m_size <<' '
+			  << (m_dataType.isEmpty() ? "&" : m_dataType) <<' '<< m_access <<endl;
 }
 
 void classMemberInfo::readClassMember(QTextStream &inStream)
 {
 	inStream >> m_id >> m_name >> m_memberType >> m_size >> m_dataType >> m_access;
+	QString placeHolder = "&";
+	if(m_name == placeHolder) m_name.clear();
+	if(m_dataType == placeHolder) m_dataType.clear();
 }
