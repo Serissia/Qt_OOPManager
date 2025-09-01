@@ -2,6 +2,8 @@
 
  SEU语言程序设计课设作业 
 
+源代码已上传至 [Github]( [Serissia/Qt_OOPManager: SEU语言程序设计课设作业：面向对象程序项目管理系统](https://github.com/Serissia/Qt_OOPManager) )
+
 ## 一 · 题目
 
 该系统需创建和管理如下信息：

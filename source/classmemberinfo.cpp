@@ -58,6 +58,61 @@ int classMemberInfo::getID() const
 	return m_id;
 }
 
+QString classMemberInfo::getAcc() const
+{
+	return m_access;
+}
+
+QString classMemberInfo::getDataType() const
+{
+	return m_dataType;
+}
+
+QString classMemberInfo::getMemType() const
+{
+	return m_memberType;
+}
+
+QString classMemberInfo::getName() const
+{
+	return m_name;
+}
+
+int classMemberInfo::getSize() const
+{
+	return m_size;
+}
+
+void classMemberInfo::setAcc(QString acc)
+{
+	m_access = acc;
+}
+
+void classMemberInfo::setDataType(QString dataType)
+{
+	m_dataType = dataType;
+}
+
+void classMemberInfo::setID(int id)
+{
+	m_id = id;
+}
+
+void classMemberInfo::setMemType(QString memType)
+{
+	m_memberType = memType;
+}
+
+void classMemberInfo::setName(QString name)
+{
+	m_name = name;
+}
+
+void classMemberInfo::setSize(int size)
+{
+	m_size = size;
+}
+
 void classMemberInfo::saveClassMember(QTextStream &outStream)
 {
 	outStream << m_id <<' '<< m_name <<' '<< m_memberType <<' '

@@ -30,6 +30,11 @@ private slots:
 
 	void tableViewUpdate();//在页面上修改后更新
 
+	void onSelectionChanged(const QItemSelection &selected,
+							const QItemSelection &deselected);//选中单元格时更新actionMember
+
+	void on_actionMember_triggered();
+
 private:
 	Ui::MainWindow *ui;
 	projectManager m_InfoManager;

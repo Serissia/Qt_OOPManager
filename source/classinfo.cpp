@@ -3,7 +3,7 @@
 
 classInfo::classInfo()
 {
-
+	nums.clear();
 }
 
 classInfo::~classInfo()
@@ -20,6 +20,7 @@ classInfo::classInfo(const classInfo &classTemp)
 	m_date = classTemp.m_date;
 	m_author = classTemp.m_author;
 	members = classTemp.members;
+	nums = classTemp.nums;
 }
 
 classInfo& classInfo::operator=(const classInfo &classTemp)
@@ -31,12 +32,28 @@ classInfo& classInfo::operator=(const classInfo &classTemp)
 	m_date = classTemp.m_date;
 	m_author = classTemp.m_author;
 	members = classTemp.members;
+	nums = classTemp.nums;
 	return *this;
 }
 
 int classInfo::getID() const
 {
 	return m_id;
+}
+
+int classInfo::getNum() const
+{
+	return members.size();
+}
+
+QSet<int>& classInfo::getAllId()
+{
+	return nums;
+}
+
+classMemberInfo& classInfo::getClassMemInfoByRow(const int row)
+{
+	return members[row];
 }
 
 QString classInfo::getAuthor() const
@@ -62,6 +79,11 @@ QString classInfo::getFunction() const
 QString classInfo::getName() const
 {
 	return m_name;
+}
+
+QVector<classMemberInfo>& classInfo::getMems()
+{
+	return members;
 }
 
 void classInfo::setId(int id)
@@ -94,9 +116,17 @@ void classInfo::setAuthor(QString author)
 	m_author = author;
 }
 
+void classInfo::setMembers(QVector<classMemberInfo>& newMems)
+{
+	members = newMems;
+	for(auto i:newMems)
+		nums.insert(i.getID());
+}
+
 void classInfo::addMember(const classMemberInfo &m)
 {
 	members.append(m);
+	nums.insert(m.getID());
 	qDebug() << "Add a classMember(ID:" << m.getID()
 			 << ") in Class(ID:" << getID() << ")\n";
 }
@@ -107,6 +137,7 @@ bool classInfo::removeMember(const int id)
 		if(members[i].getID() == id)
 		{
 			members.removeAt(i);
+			nums.remove(id);
 			qDebug() << "Remove a classMember(ID:" << id
 					 << ") in Class(ID:" << getID() << ")\n";
 			return true;

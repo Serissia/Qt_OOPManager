@@ -10,5 +10,12 @@ int main(int argc, char *argv[])
 	return a.exec();
 }
 /*
-仿照windows环境变量页面的新建、编辑功能
+下一个任务：
+修改读写文件系列函数，加上“&”作为默认占位
+
+下下个任务：
+重写tableView的单元格，使得用户输入一定合法
+
+下下下个任务：
+实现actionFind功能
 */

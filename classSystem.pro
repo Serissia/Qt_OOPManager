@@ -9,6 +9,8 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    source/checkmemdialog.cpp \
+    source/newmemberdialog.cpp \
     source/classinfo.cpp \
     source/classmemberinfo.cpp \
     main.cpp \
@@ -19,18 +21,22 @@ SOURCES += \
     source/readonlydelegate.cpp
 
 HEADERS += \
+    header/checkmemdialog.h \
     header/classinfo.h \
     header/classmemberinfo.h \
     header/invalidinputdialog.h \
     header/mainwindow.h \
     header/newclassdialog.h \
     header/projectmanager.h \
-    header/readonlydelegate.h
+    header/readonlydelegate.h \
+    header/newmemberdialog.h
 
 FORMS += \
+    checkmemdialog.ui \
     invalidinputdialog.ui \
     mainwindow.ui \
-    newclassdialog.ui
+    newclassdialog.ui \
+    newmemberdialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

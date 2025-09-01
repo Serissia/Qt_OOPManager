@@ -3,6 +3,8 @@
 #include <QDir>
 #include <QFileDialog>
 #include <header/newclassdialog.h>
+#include <QDebug>
+#include <header/checkmemdialog.h>
 
 MainWindow::MainWindow(QWidget *parent)
 	: QMainWindow(parent)
@@ -24,6 +26,10 @@ MainWindow::MainWindow(QWidget *parent)
 	// 页面修改数据同步vector
 	connect(defaultDelegate, &QAbstractItemDelegate::closeEditor, this, &MainWindow::tableViewUpdate);
 
+	ui->actionMember->setEnabled(false);//初始为禁用状态
+	connect(tableView->selectionModel(), &QItemSelectionModel::selectionChanged,
+			this, &MainWindow::onSelectionChanged);
+
 }
 
 MainWindow::~MainWindow()
@@ -40,6 +46,7 @@ void MainWindow::on_actionOpen_triggered()
 													curPath, fileFilter);
 	if(fileName.isEmpty()) return;
 	m_InfoManager.readClassFromFile(fileName);
+
 	showClassInfoTable();
 }
 
@@ -77,14 +84,14 @@ void MainWindow::showClassInfoTable()
 	model->clear();
 	model->setColumnCount(7);
 	int rowNum = m_InfoManager.getNumber();
-	model->setRowCount(rowNum);//设置行列数
+	model->setRowCount(rowNum);//设置行、列数
 
 	for(int j = 0; j < 7; ++j)
 		tableView->setItemDelegateForColumn(j, defaultDelegate);
 	tableView->setItemDelegateForColumn(0, readOnlyDelegate);//除第一列外可修改
 
 	QStringList header;
-	header << "编号" << "类成员" << "类名" << "基类名" << "功能" << "创建日期" << "作者";
+	header << "编号" << "类名" << "类成员" << "基类名" << "功能" << "创建日期" << "作者";
 	model->setHorizontalHeaderLabels(header);//设置表头
 
 	for(int i = 0; i < rowNum; ++i)//设置相关数据
@@ -100,7 +107,60 @@ void MainWindow::showClassInfoTable()
 	}
 }
 
+void MainWindow::onSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
+{
+	Q_UNUSED(deselected);
+
+	if(selected.indexes().isEmpty())
+		ui->actionMember->setEnabled(false);
+	else
+		ui->actionMember->setEnabled(true);
+}
+
 void MainWindow::tableViewUpdate()
 {
+	QModelIndex modelIndex = tableView->currentIndex();
+	if(!modelIndex.isValid()) return;
 
+	int row = modelIndex.row();
+	int col = modelIndex.column();
+	classInfo &classUpd = m_InfoManager.getClassInfoByRow(row);//获取地址方便修改
+	QVariant newData = model->data(modelIndex);
+
+	switch (col) {
+		case 1:
+			classUpd.setName(newData.toString());
+			break;
+		case 3:
+			classUpd.setBaseName(newData.toString());
+			break;
+		case 4:
+			classUpd.setFunction(newData.toString());
+			break;
+		case 5:
+			classUpd.setDate(newData.toDate());
+			break;
+		case 6:
+			classUpd.setAuthor(newData.toString());
+			break;
+	}
+
+	qDebug() << "已修改类(Id:" << classUpd.getID() << ")\n";
+}
+
+void MainWindow::on_actionMember_triggered()//编辑某个classInfo的类成员
+{
+	QModelIndex modelIndex = tableView->currentIndex();
+	if(!modelIndex.isValid()) return;
+	classInfo &classChosen = m_InfoManager.getClassInfoByRow(modelIndex.row());
+
+	checkMemDialog dlgMem(this, classChosen);//打开对应页面
+	int res = dlgMem.exec();//展示模态的新增类对话框
+	if(res == QDialog::Accepted)
+		classChosen.setMembers(dlgMem.getMems());
+/*               已知Bug待修复：
+			第二次及以后编辑添加过成员的classInfo检查id唯一性失效
+			9-1-14:43 已修复，原因是忘记更新QSet<int>nums
+*/
+	showClassInfoTable();
 }

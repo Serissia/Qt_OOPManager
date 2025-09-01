@@ -12,17 +12,17 @@ public:
 
 	void addClass(const classInfo& newClass);//增加classInfo
 	bool removeClass(const int id);//按id删除classInfo
-	int getNumber()const;
+	int getNumber()const;//获取类总数
 	classInfo* findClassById(const int classId);//按id查找classInfo
 	QSet<int>& getAllId();
-	classInfo& getClassInfoByRow(const int row);
+	classInfo& getClassInfoByRow(const int row);//返回地址方便修改
 
 	bool saveClassToFile(const QString &saveFileName);
-	bool readClassFromFile(const QString &readFileName);
+	bool readClassFromFile(const QString &readFileName);//读写文件
 private:
 	QVector<classInfo> classes;//下辖类
 	int m_number;//类总数
-	QSet<int> m_id;//所有classInfo的id
+	QSet<int> nums;//所有classInfo的id
 };
 
 #endif // PROJECTMANAGER_H

@@ -5,6 +5,7 @@
 #include <QVector>
 #include <header/classmemberinfo.h>
 #include <QTextStream>
+#include <QSet>
 
 class classInfo
 {
@@ -16,22 +17,27 @@ public:
 
 	/*相关private成员读写*/
 	int getID()const;
+	int getNum()const;//获取类成员个数
 	QString getName()const;
 	QString getBaseName()const;
 	QString getFunction()const;
 	QString getDate()const;
 	QString getAuthor()const;
+	QSet<int>& getAllId();
+	QVector<classMemberInfo>& getMems();
 	void setId(int id);
 	void setName(QString name);
 	void setBaseName(QString baseName);
 	void setFunction(QString function);
 	void setDate(QDate date);
 	void setAuthor(QString author);
+	void setMembers(QVector<classMemberInfo>& newMems);
 
 	void addMember(const classMemberInfo& m);//增加classMemberInfo
 	bool removeMember(const int id);//按id删除classMemberInfo
 
 	classMemberInfo* findMemberById(const int memberId);//按id查找classMemberInfo
+	classMemberInfo& getClassMemInfoByRow(const int row);
 	void saveClass(QTextStream &outStream);
 	void readClass(QTextStream &inStream);//读写classInfo
 private:
@@ -44,7 +50,7 @@ private:
 	QString m_author;
 
 	QVector<classMemberInfo> members;//下辖类成员
-
+	QSet<int> nums;//所有classMemberInfo的id
 };
 
 #endif // CLASSINFO_H

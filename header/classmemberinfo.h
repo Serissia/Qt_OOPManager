@@ -19,6 +19,17 @@ public:
 	void readClassMember(QTextStream &inStream);//文件读写classMemberInfo
 
 	int getID()const;
+	QString getName()const;
+	QString getMemType()const;
+	int getSize()const;
+	QString getDataType()const;
+	QString getAcc()const;
+	void setID(int id);
+	void setName(QString name);
+	void setMemType(QString memType);
+	void setSize(int size);
+	void setDataType(QString dataType);
+	void setAcc(QString acc);
 private:
 	//类成员信息：成员编号、成员名称、成员类型（数据或函数）、
 	//内存字节数（数据成员）、数据类型、可访问性（公有、私有、保护）等
