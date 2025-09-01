@@ -9,6 +9,7 @@ newmemberdialog::newmemberdialog(QWidget *parent,
 	m_id(dataSet)
 {
 	ui->setupUi(this);
+	setWindowTitle(tr("新增类成员"));
 }
 
 newmemberdialog::~newmemberdialog()
