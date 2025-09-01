@@ -5,6 +5,7 @@
 #include <header/newclassdialog.h>
 #include <QDebug>
 #include <header/checkmemdialog.h>
+#include <QHeaderView>
 
 MainWindow::MainWindow(QWidget *parent)
 	: QMainWindow(parent)
@@ -16,15 +17,20 @@ MainWindow::MainWindow(QWidget *parent)
 	tableView = new QTableView(this);
 	defaultDelegate = new QStyledItemDelegate(this);
 	readOnlyDelegate = new ReadOnlyDelegate(this);
+	dateEditDelegate = new DateEditDelegate(this);
 	model = new QStandardItemModel(this);
 
 	tableView->setSelectionMode(QAbstractItemView::SingleSelection); // 设置单行选择模式
 	tableView->setSelectionBehavior(QAbstractItemView::SelectItems); // 设置选择行为为单元格
 	tableView->setModel(model);
 	setCentralWidget(tableView);
+	tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);//随ui填充
 
 	// 页面修改数据同步vector
-	connect(defaultDelegate, &QAbstractItemDelegate::closeEditor, this, &MainWindow::tableViewUpdate);
+	connect(defaultDelegate, &QAbstractItemDelegate::closeEditor,
+			this, &MainWindow::tableViewUpdate);
+	connect(dateEditDelegate, &QAbstractItemDelegate::closeEditor,
+			this, &MainWindow::tableViewUpdate);
 
 	ui->actionMember->setEnabled(false);//初始为禁用状态
 	connect(tableView->selectionModel(), &QItemSelectionModel::selectionChanged,
@@ -89,6 +95,7 @@ void MainWindow::showClassInfoTable()
 	for(int j = 0; j < 7; ++j)
 		tableView->setItemDelegateForColumn(j, defaultDelegate);
 	tableView->setItemDelegateForColumn(0, readOnlyDelegate);//除第一列外可修改
+	tableView->setItemDelegateForColumn(5, dateEditDelegate);
 
 	QStringList header;
 	header << "编号" << "类名" << "类成员" << "基类名" << "功能" << "创建日期" << "作者";

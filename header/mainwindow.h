@@ -7,6 +7,7 @@
 #include <header/readonlydelegate.h>
 #include <QStyledItemDelegate>
 #include <QStandardItemModel>
+#include <header/dateeditdelegate.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -42,6 +43,7 @@ private:
 	QTableView *tableView;
 	QStyledItemDelegate *defaultDelegate;
 	ReadOnlyDelegate *readOnlyDelegate;
+	DateEditDelegate *dateEditDelegate;
 	QStandardItemModel *model;
 };
 #endif // MAINWINDOW_H
