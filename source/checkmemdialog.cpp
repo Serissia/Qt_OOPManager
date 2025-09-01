@@ -15,13 +15,20 @@ checkMemDialog::checkMemDialog(QWidget *parent, const classInfo& classEdit) :
 	readOnlyDelegate = new ReadOnlyDelegate(this);
 	defaultDelegate = new QStyledItemDelegate(this);
 	spinBoxDelegate = new SpinBoxDelegate(this);
+	comboBoxDelegate_Acc = new ComboBoxDelegate(this, {"公有","私有","保护"});
+	comboBoxDelegate_Mem = new ComboBoxDelegate(this, {"数据","函数"});
 
 	ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection); // 设置单行选择模式
 	ui->tableView->setSelectionBehavior(QAbstractItemView::SelectItems); // 设置选择行为为单元格
 	ui->tableView->setModel(model);
 
 	// 页面修改数据同步vector
-	connect(defaultDelegate, &QAbstractItemDelegate::closeEditor, this, &checkMemDialog::tableViewUpdate);
+	connect(defaultDelegate, &QAbstractItemDelegate::closeEditor,
+			this, &checkMemDialog::tableViewUpdate);
+	connect(comboBoxDelegate_Acc, &QAbstractItemDelegate::closeEditor,
+			this, &checkMemDialog::tableViewUpdate);
+	connect(comboBoxDelegate_Mem, &QAbstractItemDelegate::closeEditor,
+			this, &checkMemDialog::tableViewUpdate);
 
 	showClassMemInfoTable();
 }
@@ -47,6 +54,8 @@ void checkMemDialog::showClassMemInfoTable()
 		ui->tableView->setItemDelegateForColumn(j, defaultDelegate);
 	ui->tableView->setItemDelegateForColumn(0, readOnlyDelegate);//除第一列外可修改
 	ui->tableView->setItemDelegateForColumn(3, spinBoxDelegate);
+	ui->tableView->setItemDelegateForColumn(2, comboBoxDelegate_Mem);
+	ui->tableView->setItemDelegateForColumn(5, comboBoxDelegate_Acc);
 
 	QStringList header;
 	header << "成员编号" << "成员名称" << "成员类型" << "内存字节数" << "数据类型" << "可访问性";

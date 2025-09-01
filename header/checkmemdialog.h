@@ -7,6 +7,7 @@
 #include <header/readonlydelegate.h>
 #include <header/classinfo.h>
 #include <header/spinboxdelegate.h>
+#include <header/comboboxdelegate.h>
 
 namespace Ui {
 	class checkMemDialog;
@@ -37,6 +38,7 @@ private:
 	QStyledItemDelegate *defaultDelegate;
 	ReadOnlyDelegate *readOnlyDelegate;
 	SpinBoxDelegate *spinBoxDelegate;
+	ComboBoxDelegate *comboBoxDelegate_Mem, *comboBoxDelegate_Acc;
 	QStandardItemModel *model;
 	classInfo m_class;
 };

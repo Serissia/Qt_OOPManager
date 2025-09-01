@@ -1,6 +1,5 @@
 #include "header/dateeditdelegate.h"
 #include <QDateEdit>
-#include <QSpinBox>
 
 DateEditDelegate::DateEditDelegate(QObject *parent) :
 	QItemDelegate(parent)
