@@ -14,6 +14,7 @@ checkMemDialog::checkMemDialog(QWidget *parent, const classInfo& classEdit) :
 	model = new QStandardItemModel(this);
 	readOnlyDelegate = new ReadOnlyDelegate(this);
 	defaultDelegate = new QStyledItemDelegate(this);
+	spinBoxDelegate = new SpinBoxDelegate(this);
 
 	ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection); // 设置单行选择模式
 	ui->tableView->setSelectionBehavior(QAbstractItemView::SelectItems); // 设置选择行为为单元格
@@ -45,6 +46,7 @@ void checkMemDialog::showClassMemInfoTable()
 	for(int j = 0; j < 6; ++j)
 		ui->tableView->setItemDelegateForColumn(j, defaultDelegate);
 	ui->tableView->setItemDelegateForColumn(0, readOnlyDelegate);//除第一列外可修改
+	ui->tableView->setItemDelegateForColumn(3, spinBoxDelegate);
 
 	QStringList header;
 	header << "成员编号" << "成员名称" << "成员类型" << "内存字节数" << "数据类型" << "可访问性";

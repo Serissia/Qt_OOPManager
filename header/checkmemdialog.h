@@ -6,6 +6,7 @@
 #include <QStandardItemModel>
 #include <header/readonlydelegate.h>
 #include <header/classinfo.h>
+#include <header/spinboxdelegate.h>
 
 namespace Ui {
 	class checkMemDialog;
@@ -35,6 +36,7 @@ private:
 
 	QStyledItemDelegate *defaultDelegate;
 	ReadOnlyDelegate *readOnlyDelegate;
+	SpinBoxDelegate *spinBoxDelegate;
 	QStandardItemModel *model;
 	classInfo m_class;
 };

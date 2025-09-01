@@ -19,7 +19,8 @@ SOURCES += \
     source/mainwindow.cpp \
     source/newclassdialog.cpp \
     source/projectmanager.cpp \
-    source/readonlydelegate.cpp
+    source/readonlydelegate.cpp \
+    source/spinboxdelegate.cpp
 
 HEADERS += \
     header/dateeditdelegate.h \
@@ -31,7 +32,8 @@ HEADERS += \
     header/newclassdialog.h \
     header/projectmanager.h \
     header/readonlydelegate.h \
-    header/newmemberdialog.h
+    header/newmemberdialog.h \
+    header/spinboxdelegate.h
 
 FORMS += \
     checkmemdialog.ui \
