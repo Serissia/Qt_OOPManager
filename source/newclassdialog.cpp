@@ -9,6 +9,7 @@ newClassDialog::newClassDialog(QWidget *parent, const QSet<int>& dataSet) :
 {
 	ui->setupUi(this);
 	setWindowTitle(tr("新建类"));
+	setFixedSize(600, 700);//固定窗口大小
 
 	ui->dateEdit->setDisplayFormat("yyyy/M/d");//设置日期格式
 	ui->dateEdit->setDateTime(QDateTime::currentDateTime());//默认显示系统时间

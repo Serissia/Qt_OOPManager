@@ -2,6 +2,7 @@
 #include "ui_checkmemdialog.h"
 #include <header/newmemberdialog.h>
 #include <QDebug>
+#include <QLayout>
 
 checkMemDialog::checkMemDialog(QWidget *parent, const classInfo& classEdit) :
 	QDialog(parent),
@@ -10,6 +11,33 @@ checkMemDialog::checkMemDialog(QWidget *parent, const classInfo& classEdit) :
 {
 	ui->setupUi(this);
 	setWindowTitle(m_class.getName() + "的类成员");
+
+	// 创建按钮布局
+	QHBoxLayout *buttonLayout = new QHBoxLayout;
+	buttonLayout->addStretch(); // 添加弹性空间
+	buttonLayout->addWidget(ui->ButtonNew);
+	buttonLayout->addSpacing(60); // 按钮间距
+	buttonLayout->addWidget(ui->ButtonDel);
+	buttonLayout->addSpacing(60);
+	buttonLayout->addWidget(ui->ButtonRe);
+	buttonLayout->addStretch();
+
+	// 创建主布局
+	QVBoxLayout *mainLayout = new QVBoxLayout(this);
+	mainLayout->addWidget(ui->tableView);
+	mainLayout->addLayout(buttonLayout);
+
+	// 设置拉伸因子，使tableView获得更多空间
+	mainLayout->setStretchFactor(ui->tableView, 5);
+	mainLayout->setStretchFactor(buttonLayout, 1);
+
+	// 设置布局边距和间距
+	mainLayout->setContentsMargins(10, 10, 10, 10);
+	mainLayout->setSpacing(40);
+
+	// 设置对话框属性
+	setMinimumSize(800, 800); // 设置最小大小
+	ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);// 使表格列自动填充可用空间
 
 	model = new QStandardItemModel(this);
 	readOnlyDelegate = new ReadOnlyDelegate(this);
@@ -104,7 +132,7 @@ void checkMemDialog::tableViewUpdate()//更新类成员的tableView
 	qDebug() << "已修改类(Id:" << m_class.getID() << ")的类成员(Id:"
 			 << classMemUpd.getID() << ")\n";
 }
-void checkMemDialog::on_pushButton_clicked()//新增类成员
+void checkMemDialog::on_ButtonNew_clicked()//新增类成员
 {
 	newmemberdialog dlgNew(this, m_class.getAllId());
 	int ret = dlgNew.exec();//展示模态的新增类对话框
@@ -122,7 +150,12 @@ void checkMemDialog::on_pushButton_clicked()//新增类成员
 	}
 }
 
-void checkMemDialog::on_pushButton_2_clicked()
+void checkMemDialog::on_ButtonRe_clicked()
 {
 	accept();
+}
+
+void checkMemDialog::on_ButtonDel_clicked()
+{
+
 }

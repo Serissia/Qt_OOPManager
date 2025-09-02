@@ -6,6 +6,7 @@
 #include <QDebug>
 #include <header/checkmemdialog.h>
 #include <QHeaderView>
+#include <QFont>
 
 MainWindow::MainWindow(QWidget *parent)
 	: QMainWindow(parent)
@@ -14,12 +15,16 @@ MainWindow::MainWindow(QWidget *parent)
 	ui->setupUi(this);
 	setWindowTitle(tr("面向对象程序项目管理系统"));//设置主页面标题
 
+	QFont font;
+	font.setPointSize(14);
+
 	tableView = new QTableView(this);
 	defaultDelegate = new QStyledItemDelegate(this);
 	readOnlyDelegate = new ReadOnlyDelegate(this);
 	dateEditDelegate = new DateEditDelegate(this);
 	model = new QStandardItemModel(this);
 
+	tableView->setFont(font);
 	tableView->setSelectionMode(QAbstractItemView::SingleSelection); // 设置单行选择模式
 	tableView->setSelectionBehavior(QAbstractItemView::SelectItems); // 设置选择行为为单元格
 	tableView->setModel(model);
@@ -107,9 +112,11 @@ void MainWindow::showClassInfoTable()
 		model->setItem(i, 0, new QStandardItem(QString::number(tmpClass.getID())));
 		model->setItem(i, 1, new QStandardItem(tmpClass.getName()));
 		model->setItem(i, 2, new QStandardItem(tr("[点击详情]")));
+		model->item(i, 2)->setTextAlignment(Qt::AlignCenter);
 		model->setItem(i, 3, new QStandardItem(tmpClass.getBaseName()));
 		model->setItem(i, 4, new QStandardItem(tmpClass.getFunction()));
 		model->setItem(i, 5, new QStandardItem(tmpClass.getDate()));
+		model->item(i, 5)->setTextAlignment(Qt::AlignCenter);
 		model->setItem(i, 6, new QStandardItem(tmpClass.getName()));
 	}
 }

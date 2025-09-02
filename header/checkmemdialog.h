@@ -28,9 +28,11 @@ public:
 private slots:
 	void tableViewUpdate();//在页面上修改后更新
 
-	void on_pushButton_clicked();
+	void on_ButtonNew_clicked();
 
-	void on_pushButton_2_clicked();
+	void on_ButtonRe_clicked();
+
+	void on_ButtonDel_clicked();
 
 private:
 	Ui::checkMemDialog *ui;
