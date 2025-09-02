@@ -7,6 +7,7 @@
 #include <header/checkmemdialog.h>
 #include <QHeaderView>
 #include <QFont>
+#include <header/deletewarn.h>
 
 MainWindow::MainWindow(QWidget *parent)
 	: QMainWindow(parent)
@@ -38,9 +39,9 @@ MainWindow::MainWindow(QWidget *parent)
 			this, &MainWindow::tableViewUpdate);
 
 	ui->actionMember->setEnabled(false);//初始为禁用状态
+	ui->actionDelete->setEnabled(false);
 	connect(tableView->selectionModel(), &QItemSelectionModel::selectionChanged,
 			this, &MainWindow::onSelectionChanged);
-
 }
 
 MainWindow::~MainWindow()
@@ -126,9 +127,15 @@ void MainWindow::onSelectionChanged(const QItemSelection &selected, const QItemS
 	Q_UNUSED(deselected);
 
 	if(selected.indexes().isEmpty())
+	{
 		ui->actionMember->setEnabled(false);
+		ui->actionDelete->setEnabled(false);
+	}
 	else
+	{
 		ui->actionMember->setEnabled(true);
+		ui->actionDelete->setEnabled(true);
+	}
 }
 
 void MainWindow::tableViewUpdate()
@@ -177,4 +184,30 @@ void MainWindow::on_actionMember_triggered()//编辑某个classInfo的类成员
 			9-1-14:43 已修复，原因是忘记更新QSet<int>nums
 */
 	showClassInfoTable();
+}
+
+void MainWindow::on_actionFind_triggered()
+{
+
+}
+
+void MainWindow::on_actionDelete_triggered()//删除classInfo
+{
+	QModelIndex modelIndex = tableView->currentIndex();
+	if(!modelIndex.isValid()) return;
+	classInfo &classChosen = m_InfoManager.getClassInfoByRow(modelIndex.row());
+
+	DeleteWarn dlgDel(this);
+	int res = dlgDel.exec();
+	if(res == QDialog::Accepted)
+	{
+		int idr = classChosen.getID();
+		if(!m_InfoManager.removeClass(idr))
+			qDebug() << "删除失败！\n";
+		else
+		{
+			qDebug() << "删除成功\n";
+			showClassInfoTable();
+		}
+	}
 }

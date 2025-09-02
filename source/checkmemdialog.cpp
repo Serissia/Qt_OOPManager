@@ -3,6 +3,7 @@
 #include <header/newmemberdialog.h>
 #include <QDebug>
 #include <QLayout>
+#include <header/deletewarn.h>
 
 checkMemDialog::checkMemDialog(QWidget *parent, const classInfo& classEdit) :
 	QDialog(parent),
@@ -58,7 +59,11 @@ checkMemDialog::checkMemDialog(QWidget *parent, const classInfo& classEdit) :
 	connect(comboBoxDelegate_Mem, &QAbstractItemDelegate::closeEditor,
 			this, &checkMemDialog::tableViewUpdate);
 
-	showClassMemInfoTable();
+	ui->ButtonDel->setEnabled(false);//初始设为禁用
+	connect(ui->tableView->selectionModel(), &QItemSelectionModel::selectionChanged,
+			this, &checkMemDialog::onSelectionChanged);
+
+	if(m_class.getNum() != 0) showClassMemInfoTable();
 }
 
 checkMemDialog::~checkMemDialog()
@@ -132,6 +137,17 @@ void checkMemDialog::tableViewUpdate()//更新类成员的tableView
 	qDebug() << "已修改类(Id:" << m_class.getID() << ")的类成员(Id:"
 			 << classMemUpd.getID() << ")\n";
 }
+
+void checkMemDialog::onSelectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
+{
+	Q_UNUSED(deselected);
+
+	if(selected.indexes().isEmpty())
+		ui->ButtonDel->setEnabled(false);
+	else
+		ui->ButtonDel->setEnabled(true);
+}
+
 void checkMemDialog::on_ButtonNew_clicked()//新增类成员
 {
 	newmemberdialog dlgNew(this, m_class.getAllId());
@@ -157,5 +173,21 @@ void checkMemDialog::on_ButtonRe_clicked()
 
 void checkMemDialog::on_ButtonDel_clicked()
 {
+	QModelIndex modelIndex = ui->tableView->currentIndex();
+	if(!modelIndex.isValid()) return;
+	classMemberInfo &memberChosen = m_class.getClassMemInfoByRow(modelIndex.row());
 
+	DeleteWarn dlgDel(this);
+	int res = dlgDel.exec();
+	if(res == QDialog::Accepted)
+	{
+		int idr = memberChosen.getID();
+		if(!m_class.removeMember(idr))
+			qDebug() << "删除失败！\n";
+		else
+		{
+			qDebug() << "删除成功\n";
+			showClassMemInfoTable();
+		}
+	}
 }

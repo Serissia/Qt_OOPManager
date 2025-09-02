@@ -8,6 +8,7 @@
 #include <header/classinfo.h>
 #include <header/spinboxdelegate.h>
 #include <header/comboboxdelegate.h>
+#include <QItemSelection>
 
 namespace Ui {
 	class checkMemDialog;
@@ -33,6 +34,9 @@ private slots:
 	void on_ButtonRe_clicked();
 
 	void on_ButtonDel_clicked();
+
+	void onSelectionChanged(const QItemSelection &selected,
+							const QItemSelection &deselected);
 
 private:
 	Ui::checkMemDialog *ui;

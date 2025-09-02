@@ -19,6 +19,9 @@ int main(int argc, char *argv[])
 任务3：
 实现actionFind功能
 
-任务4：
+任务4：Done!
 修改ui文件
+
+任务5：
+实现actionDelete功能
 */

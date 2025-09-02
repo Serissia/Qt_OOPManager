@@ -36,6 +36,10 @@ private slots:
 
 	void on_actionMember_triggered();
 
+	void on_actionFind_triggered();
+
+	void on_actionDelete_triggered();
+
 private:
 	Ui::MainWindow *ui;
 	projectManager m_InfoManager;

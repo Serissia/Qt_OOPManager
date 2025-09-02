@@ -8,6 +8,7 @@ invalidInputDialog::invalidInputDialog(QWidget *parent, const int newid) :
 {
 	ui->setupUi(this);
 	setWindowTitle(tr("Warning!"));
+	setFixedSize(660, 350);
 }
 
 invalidInputDialog::~invalidInputDialog()
