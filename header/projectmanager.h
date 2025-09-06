@@ -10,6 +10,7 @@ public:
 	projectManager();
 	virtual ~projectManager();
 
+	void clear();
 	void addClass(const classInfo& newClass);//增加classInfo
 	bool removeClass(const int id);//按id删除classInfo
 	int getNumber()const;//获取类总数

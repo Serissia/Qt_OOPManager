@@ -20,7 +20,8 @@ class MainWindow : public QMainWindow
 public:
 	MainWindow(QWidget *parent = nullptr);
 	~MainWindow();
-	void showClassInfoTable();//展示所有classInfo
+	void showClassInfoTable(int page);//展示所有classInfo
+	void FindClass(QVariant, int);
 
 private slots:
 	void on_actionOpen_triggered();//打开文件按钮
@@ -34,20 +35,26 @@ private slots:
 	void onSelectionChanged(const QItemSelection &selected,
 							const QItemSelection &deselected);//选中单元格时更新actionMember
 
+	void onDoubleClicked(const QModelIndex &index);//双击[查看详情]
+
 	void on_actionMember_triggered();
 
 	void on_actionFind_triggered();
 
 	void on_actionDelete_triggered();
 
+	void onPageChanged();
+
 private:
 	Ui::MainWindow *ui;
-	projectManager m_InfoManager;
+	projectManager m_InfoManager[2];//0负责所有, 1负责搜索过后
 
-	QTableView *tableView;
-	QStyledItemDelegate *defaultDelegate;
-	ReadOnlyDelegate *readOnlyDelegate;
-	DateEditDelegate *dateEditDelegate;
-	QStandardItemModel *model;
+	QStyledItemDelegate *defaultDelegate[2];
+	ReadOnlyDelegate *readOnlyDelegate[2];
+	DateEditDelegate *dateEditDelegate[2];
+	QStandardItemModel *model[2];
+
+	QTableView *tableView[2];
+	QTabWidget *tabWidget;
 };
 #endif // MAINWINDOW_H

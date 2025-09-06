@@ -22,6 +22,9 @@ int main(int argc, char *argv[])
 任务4：Done!
 修改ui文件
 
-任务5：
+任务5：Done!
 实现actionDelete功能
+
+任务6：
+实现点击*对应*表头进行排序
 */

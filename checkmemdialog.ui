@@ -16,7 +16,7 @@
   <widget class="QPushButton" name="ButtonDel">
    <property name="geometry">
     <rect>
-     <x>370</x>
+     <x>280</x>
      <y>650</y>
      <width>170</width>
      <height>70</height>
@@ -56,8 +56,8 @@
   <widget class="QPushButton" name="ButtonRe">
    <property name="geometry">
     <rect>
-     <x>720</x>
-     <y>660</y>
+     <x>780</x>
+     <y>650</y>
      <width>170</width>
      <height>70</height>
     </rect>
@@ -74,7 +74,7 @@
     </font>
    </property>
    <property name="text">
-    <string>返回</string>
+    <string>完成</string>
    </property>
   </widget>
   <widget class="QPushButton" name="ButtonNew">
@@ -99,6 +99,24 @@
    </property>
    <property name="text">
     <string>新建</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="ButtonFind">
+   <property name="geometry">
+    <rect>
+     <x>520</x>
+     <y>650</y>
+     <width>170</width>
+     <height>70</height>
+    </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>16</pointsize>
+    </font>
+   </property>
+   <property name="text">
+    <string>查找</string>
    </property>
   </widget>
  </widget>

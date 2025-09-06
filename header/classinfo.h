@@ -33,6 +33,7 @@ public:
 	void setAuthor(QString author);
 	void setMembers(QVector<classMemberInfo>& newMems);
 
+	void clear();
 	void addMember(const classMemberInfo& m);//增加classMemberInfo
 	bool removeMember(const int id);//按id删除classMemberInfo
 

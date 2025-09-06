@@ -26,6 +26,8 @@ public:
 	void showClassMemInfoTable();//展示对应classInfo的所有类成员
 	QVector<classMemberInfo>& getMems();
 
+	void FindMember(QVariant goal, int chosen);
+
 private slots:
 	void tableViewUpdate();//在页面上修改后更新
 
@@ -38,6 +40,8 @@ private slots:
 	void onSelectionChanged(const QItemSelection &selected,
 							const QItemSelection &deselected);
 
+	void on_ButtonFind_clicked();
+
 private:
 	Ui::checkMemDialog *ui;
 
@@ -46,7 +50,9 @@ private:
 	SpinBoxDelegate *spinBoxDelegate;
 	ComboBoxDelegate *comboBoxDelegate_Mem, *comboBoxDelegate_Acc;
 	QStandardItemModel *model;
-	classInfo m_class;
+	classInfo m_class[2];//0负责所有, 1负责查找过后的
+
+	bool isFound;
 };
 
 #endif // CHECKMEMDIALOG_H

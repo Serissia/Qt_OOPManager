@@ -4,22 +4,28 @@
 #include <QDebug>
 #include <QLayout>
 #include <header/deletewarn.h>
+#include <header/findformember.h>
 
 checkMemDialog::checkMemDialog(QWidget *parent, const classInfo& classEdit) :
 	QDialog(parent),
-	ui(new Ui::checkMemDialog),
-	m_class(classEdit)//最后要返回m_class!!!
+	ui(new Ui::checkMemDialog)//最后要返回m_class!!!
 {
 	ui->setupUi(this);
-	setWindowTitle(m_class.getName() + "的类成员");
+	m_class[0] = classEdit;
+	m_class[1].clear();
+	setWindowTitle(m_class[0].getName() + "的类成员");
+
+	isFound = false;//false显示"查找", true显示"返回"
 
 	// 创建按钮布局
 	QHBoxLayout *buttonLayout = new QHBoxLayout;
 	buttonLayout->addStretch(); // 添加弹性空间
 	buttonLayout->addWidget(ui->ButtonNew);
-	buttonLayout->addSpacing(60); // 按钮间距
+	buttonLayout->addSpacing(50); // 按钮间距
 	buttonLayout->addWidget(ui->ButtonDel);
-	buttonLayout->addSpacing(60);
+	buttonLayout->addSpacing(50);
+	buttonLayout->addWidget(ui->ButtonFind);
+	buttonLayout->addSpacing(50);
 	buttonLayout->addWidget(ui->ButtonRe);
 	buttonLayout->addStretch();
 
@@ -63,7 +69,7 @@ checkMemDialog::checkMemDialog(QWidget *parent, const classInfo& classEdit) :
 	connect(ui->tableView->selectionModel(), &QItemSelectionModel::selectionChanged,
 			this, &checkMemDialog::onSelectionChanged);
 
-	if(m_class.getNum() != 0) showClassMemInfoTable();
+	if(m_class[0].getNum() != 0) showClassMemInfoTable();
 }
 
 checkMemDialog::~checkMemDialog()
@@ -73,14 +79,14 @@ checkMemDialog::~checkMemDialog()
 
 QVector<classMemberInfo>& checkMemDialog::getMems()
 {
-	return m_class.getMems();
+	return m_class[0].getMems();
 }
 
 void checkMemDialog::showClassMemInfoTable()
 {
 	model->clear();
 	model->setColumnCount(6);
-	int rowNum = m_class.getNum();
+	int rowNum = m_class[isFound].getNum();
 	model->setRowCount(rowNum);//设置行、列数
 
 	for(int j = 0; j < 6; ++j)
@@ -96,7 +102,7 @@ void checkMemDialog::showClassMemInfoTable()
 
 	for(int i = 0; i < rowNum; ++i)//设置相关数据
 	{
-		classMemberInfo tmpMember = m_class.getClassMemInfoByRow(i);
+		classMemberInfo tmpMember = m_class[isFound].getClassMemInfoByRow(i);
 		model->setItem(i, 0, new QStandardItem(QString::number(tmpMember.getID())));
 		model->setItem(i, 1, new QStandardItem(tmpMember.getName()));
 		model->setItem(i, 2, new QStandardItem(tmpMember.getMemType()));
@@ -113,28 +119,34 @@ void checkMemDialog::tableViewUpdate()//更新类成员的tableView
 
 	int row = modelIndex.row();
 	int col = modelIndex.column();
-	classMemberInfo &classMemUpd = m_class.getClassMemInfoByRow(row);
+	classMemberInfo &classMemUpd = m_class[isFound].getClassMemInfoByRow(row);
+	classMemberInfo *classMemElse = m_class[!isFound].findMemberById(classMemUpd.getID());
 	QVariant newData = model->data(modelIndex);
 
 	switch (col) {
 		case 1:
 			classMemUpd.setName(newData.toString());
+			if(classMemElse!=nullptr) classMemElse->setName(newData.toString());
 			break;
 		case 2:
 			classMemUpd.setMemType(newData.toString());
+			if(classMemElse!=nullptr) classMemElse->setMemType(newData.toString());
 			break;
 		case 3:
 			classMemUpd.setSize(newData.toInt());
+			if(classMemElse!=nullptr) classMemElse->setSize(newData.toInt());
 			break;
 		case 4:
 			classMemUpd.setDataType(newData.toString());
+			if(classMemElse!=nullptr) classMemElse->setDataType(newData.toString());
 			break;
 		case 5:
 			classMemUpd.setAcc(newData.toString());
+			if(classMemElse!=nullptr) classMemElse->setAcc(newData.toString());
 			break;
 	}
 
-	qDebug() << "已修改类(Id:" << m_class.getID() << ")的类成员(Id:"
+	qDebug() << "已修改类(Id:" << m_class[isFound].getID() << ")的类成员(Id:"
 			 << classMemUpd.getID() << ")\n";
 }
 
@@ -150,7 +162,7 @@ void checkMemDialog::onSelectionChanged(const QItemSelection &selected, const QI
 
 void checkMemDialog::on_ButtonNew_clicked()//新增类成员
 {
-	newmemberdialog dlgNew(this, m_class.getAllId());
+	newmemberdialog dlgNew(this, m_class[0].getAllId());
 	int ret = dlgNew.exec();//展示模态的新增类对话框
 	if(ret == QDialog::Accepted)
 	{
@@ -161,7 +173,7 @@ void checkMemDialog::on_ButtonNew_clicked()//新增类成员
 		tmpMember.setMemType(dlgNew.MemType());
 		tmpMember.setName(dlgNew.Name());
 		tmpMember.setSize(dlgNew.Size());
-		m_class.addMember(tmpMember);
+		m_class[0].addMember(tmpMember);
 		showClassMemInfoTable();
 	}
 }
@@ -175,19 +187,85 @@ void checkMemDialog::on_ButtonDel_clicked()
 {
 	QModelIndex modelIndex = ui->tableView->currentIndex();
 	if(!modelIndex.isValid()) return;
-	classMemberInfo &memberChosen = m_class.getClassMemInfoByRow(modelIndex.row());
+	classMemberInfo &memberChosen = m_class[isFound].getClassMemInfoByRow(modelIndex.row());
 
 	DeleteWarn dlgDel(this);
 	int res = dlgDel.exec();
 	if(res == QDialog::Accepted)
 	{
 		int idr = memberChosen.getID();
-		if(!m_class.removeMember(idr))
+		if(!m_class[isFound].removeMember(idr))
 			qDebug() << "删除失败！\n";
 		else
 		{
 			qDebug() << "删除成功\n";
+			if(isFound) m_class[0].removeMember(idr);
 			showClassMemInfoTable();
+		}
+	}
+}
+
+void checkMemDialog::on_ButtonFind_clicked()
+{
+
+	if(isFound)
+	{
+		isFound = false;
+		ui->ButtonFind->setText(tr("查找"));
+	}
+	else
+	{
+		FindForMember dlgFind(this);
+		int res = dlgFind.exec();
+		if(res == QDialog::Accepted)
+		{
+			isFound = true;
+			ui->ButtonFind->setText(tr("返回"));
+			int chosen = dlgFind.getChosen();
+			switch(chosen)
+			{
+				case 0:
+					FindMember(dlgFind.Num(), 0);
+					break;
+				case 1:
+					FindMember(dlgFind.Name(), 1);
+					break;
+				case 2:
+					FindMember(dlgFind.MemType(), 2);
+					break;
+				case 3:
+					FindMember(dlgFind.Acc(), 3);
+					break;
+			}
+		}
+	}
+	showClassMemInfoTable();
+}
+
+void checkMemDialog::FindMember(QVariant goal, int chosen)
+{
+	m_class[1].clear();
+	for(int i = 0; i < m_class[0].getNum(); ++i)//暴力遍历
+	{
+		classMemberInfo &tmpMember = m_class[0].getClassMemInfoByRow(i);
+		switch(chosen)
+		{
+			case 0:
+				if(goal.toInt() == tmpMember.getID())
+					m_class[1].addMember(tmpMember);
+				break;
+			case 1:
+				if(goal.toString() == tmpMember.getName())
+					m_class[1].addMember(tmpMember);
+				break;
+			case 2:
+				if(goal.toString() == tmpMember.getMemType())
+					m_class[1].addMember(tmpMember);
+				break;
+			case 3:
+				if(goal.toString() == tmpMember.getAcc())
+					m_class[1].addMember(tmpMember);
+				break;
 		}
 	}
 }

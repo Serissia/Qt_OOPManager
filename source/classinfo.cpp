@@ -119,6 +119,7 @@ void classInfo::setAuthor(QString author)
 void classInfo::setMembers(QVector<classMemberInfo>& newMems)
 {
 	members = newMems;
+	nums.clear();
 	for(auto i:newMems)
 		nums.insert(i.getID());
 }
@@ -182,4 +183,10 @@ void classInfo::readClass(QTextStream &inStream)
 		tmpMember.readClassMember(inStream);
 		members.append(tmpMember);
 	}
+}
+
+void classInfo::clear()
+{
+	members.clear();
+	nums.clear();
 }

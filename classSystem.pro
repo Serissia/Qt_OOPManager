@@ -9,6 +9,8 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    source/findforclass.cpp \
+    source/findformember.cpp \
     source/deletewarn.cpp \
     source/comboboxdelegate.cpp \
     source/dateeditdelegate.cpp \
@@ -25,6 +27,8 @@ SOURCES += \
     source/spinboxdelegate.cpp
 
 HEADERS += \
+    header/findforclass.h \
+    header/findformember.h \
     header/deletewarn.h \
     header/comboboxdelegate.h \
     header/dateeditdelegate.h \
@@ -42,6 +46,8 @@ HEADERS += \
 FORMS += \
     checkmemdialog.ui \
     deletewarn.ui \
+    findforclass.ui \
+    findformember.ui \
     invalidinputdialog.ui \
     mainwindow.ui \
     newclassdialog.ui \

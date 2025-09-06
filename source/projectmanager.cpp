@@ -15,6 +15,13 @@ projectManager::~projectManager()
 
 }
 
+void projectManager::clear()
+{
+	m_number = 0;
+	classes.clear();
+	nums.clear();
+}
+
 int projectManager::getNumber() const
 {
 	return m_number;
