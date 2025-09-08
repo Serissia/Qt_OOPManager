@@ -9,6 +9,7 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    source/defaultnotice.cpp \
     source/findforclass.cpp \
     source/findformember.cpp \
     source/deletewarn.cpp \
@@ -27,6 +28,7 @@ SOURCES += \
     source/spinboxdelegate.cpp
 
 HEADERS += \
+    header/defaultnotice.h \
     header/findforclass.h \
     header/findformember.h \
     header/deletewarn.h \
@@ -45,6 +47,7 @@ HEADERS += \
 
 FORMS += \
     checkmemdialog.ui \
+    defaultnotice.ui \
     deletewarn.ui \
     findforclass.ui \
     findformember.ui \

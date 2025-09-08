@@ -45,6 +45,10 @@ private slots:
 
 	void onPageChanged();
 
+	void on_actionCreate_triggered();
+
+	void on_actionShow_triggered();
+
 private:
 	Ui::MainWindow *ui;
 	projectManager m_InfoManager[2];//0负责所有, 1负责搜索过后

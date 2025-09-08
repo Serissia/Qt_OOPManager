@@ -1,4 +1,5 @@
 #include "header/classmemberinfo.h"
+#include <QDebug>
 
 classMemberInfo::classMemberInfo()
 {
@@ -123,6 +124,7 @@ void classMemberInfo::saveClassMember(QTextStream &outStream)
 void classMemberInfo::readClassMember(QTextStream &inStream)
 {
 	inStream >> m_id >> m_name >> m_memberType >> m_size >> m_dataType >> m_access;
+//	qDebug() << "readClassMember" <<endl;
 	QString placeHolder = "&";
 	if(m_name == placeHolder) m_name.clear();
 	if(m_dataType == placeHolder) m_dataType.clear();

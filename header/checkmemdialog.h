@@ -42,6 +42,8 @@ private slots:
 
 	void on_ButtonFind_clicked();
 
+	void onDoubleClicked(const QModelIndex &index);//双击禁止函数修改内存
+
 private:
 	Ui::checkMemDialog *ui;
 

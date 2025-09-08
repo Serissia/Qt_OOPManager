@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>invalidInputDialog</class>
- <widget class="QDialog" name="invalidInputDialog">
+ <class>DefaultNotice</class>
+ <widget class="QDialog" name="DefaultNotice">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -15,15 +15,15 @@
   </property>
   <property name="windowIcon">
    <iconset resource="img.qrc">
-    <normaloff>:/icon/resource/triangle-exclamation-solid-full.svg</normaloff>:/icon/resource/triangle-exclamation-solid-full.svg</iconset>
+    <normaloff>:/icon/resource/flag-checkered-solid-full.svg</normaloff>:/icon/resource/flag-checkered-solid-full.svg</iconset>
   </property>
-  <widget class="QLabel" name="label">
+  <widget class="QPushButton" name="pushButton">
    <property name="geometry">
     <rect>
-     <x>50</x>
-     <y>100</y>
-     <width>601</width>
-     <height>51</height>
+     <x>450</x>
+     <y>260</y>
+     <width>170</width>
+     <height>70</height>
     </rect>
    </property>
    <property name="font">
@@ -32,34 +32,16 @@
     </font>
    </property>
    <property name="text">
-    <string>您输入了一个重复的编号，请另做尝试！</string>
+    <string>确定</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="pushButton">
+  <widget class="QLabel" name="label">
    <property name="geometry">
     <rect>
-     <x>430</x>
-     <y>240</y>
-     <width>181</width>
-     <height>71</height>
-    </rect>
-   </property>
-   <property name="font">
-    <font>
-     <pointsize>12</pointsize>
-    </font>
-   </property>
-   <property name="text">
-    <string>确认</string>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_2">
-   <property name="geometry">
-    <rect>
-     <x>50</x>
-     <y>150</y>
-     <width>601</width>
-     <height>41</height>
+     <x>60</x>
+     <y>20</y>
+     <width>551</width>
+     <height>201</height>
     </rect>
    </property>
    <property name="font">
@@ -70,6 +52,9 @@
    <property name="text">
     <string>%占位%</string>
    </property>
+   <property name="wordWrap">
+    <bool>true</bool>
+   </property>
   </widget>
  </widget>
  <resources>
@@ -79,16 +64,16 @@
   <connection>
    <sender>pushButton</sender>
    <signal>clicked()</signal>
-   <receiver>invalidInputDialog</receiver>
+   <receiver>DefaultNotice</receiver>
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>309</x>
-     <y>230</y>
+     <x>515</x>
+     <y>277</y>
     </hint>
     <hint type="destinationlabel">
-     <x>354</x>
-     <y>259</y>
+     <x>633</x>
+     <y>286</y>
     </hint>
    </hints>
   </connection>

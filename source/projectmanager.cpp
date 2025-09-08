@@ -86,15 +86,17 @@ bool projectManager::readClassFromFile(const QString &readFileName)
 	/*初始化*/
 	m_number = 0;
 	classes.clear();
-
-	in >> m_number;
+	int tot;
+	in >> tot;//这里不能用m_number, 因为addClass会++m_number
+//	qDebug() << "m_number=" << m_number<<endl;
 	classInfo tmpClass;
-	if(m_number > 0)
-		for(int i = 0; i < m_number; ++i)
-		{
-			tmpClass.readClass(in);
-			addClass(tmpClass);
-		}
+	for(int i = 1; i <= tot; ++i)
+	{
+//		qDebug() << i <<endl;
+		tmpClass.clear();//一定要清空
+		tmpClass.readClass(in);
+		addClass(tmpClass);
+	}
 
 	file.close();
 	qDebug() << readFileName << endl;

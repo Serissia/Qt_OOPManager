@@ -169,14 +169,16 @@ void classInfo::saveClass(QTextStream &outStream)
 void classInfo::readClass(QTextStream &inStream)
 {
 	QString tmpDate, placeHolder = "&";
+//	qDebug() << "readClass"<<endl;
 	inStream >> m_id >> m_name >> m_baseName >> m_function >> tmpDate >> m_author;
 	if(m_name == placeHolder) m_name.clear();
 	if(m_baseName == placeHolder) m_baseName.clear();
 	if(m_function == placeHolder) m_function.clear();
 	if(m_author == placeHolder) m_author.clear();
 	m_date = QDate::fromString(tmpDate, "yyyy/M/d");//额外进行转换
-	int memSize = 0;
+	int memSize;
 	inStream >> memSize;
+//	qDebug() << memSize <<endl;
 	classMemberInfo tmpMember;
 	for(int i = 1; i <= memSize; ++i)
 	{

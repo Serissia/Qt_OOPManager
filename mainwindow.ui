@@ -25,6 +25,10 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="img.qrc">
+    <normaloff>:/icon/resource/list-check-solid-full.svg</normaloff>:/icon/resource/list-check-solid-full.svg</iconset>
+  </property>
   <property name="toolButtonStyle">
    <enum>Qt::ToolButtonIconOnly</enum>
   </property>
@@ -57,8 +61,17 @@
     <property name="title">
      <string>文件(&amp;F)</string>
     </property>
+    <widget class="QMenu" name="menu">
+     <property name="title">
+      <string>示例文件(...)</string>
+     </property>
+     <addaction name="actionCreate"/>
+     <addaction name="actionShow"/>
+    </widget>
     <addaction name="actionOpen"/>
     <addaction name="actionSave"/>
+    <addaction name="separator"/>
+    <addaction name="menu"/>
    </widget>
    <widget class="QMenu" name="menuEdit">
     <property name="font">
@@ -89,11 +102,17 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actionOpen"/>
+   <addaction name="actionSave"/>
+   <addaction name="actionNew"/>
+   <addaction name="actionDelete"/>
+   <addaction name="actionMember"/>
+   <addaction name="actionFind"/>
   </widget>
   <action name="actionOpen">
    <property name="icon">
     <iconset resource="img.qrc">
-     <normaloff>:/png/resource/open.png</normaloff>:/png/resource/open.png</iconset>
+     <normaloff>:/icon/resource/file-import-solid-full.svg</normaloff>:/icon/resource/file-import-solid-full.svg</iconset>
    </property>
    <property name="text">
     <string>打开文件(&amp;O)</string>
@@ -110,7 +129,7 @@
   <action name="actionSave">
    <property name="icon">
     <iconset resource="img.qrc">
-     <normaloff>:/png/resource/new.png</normaloff>:/png/resource/new.png</iconset>
+     <normaloff>:/icon/resource/file-export-solid-full.svg</normaloff>:/icon/resource/file-export-solid-full.svg</iconset>
    </property>
    <property name="text">
     <string>保存文件(&amp;S)</string>
@@ -125,6 +144,10 @@
    </property>
   </action>
   <action name="actionNew">
+   <property name="icon">
+    <iconset resource="img.qrc">
+     <normaloff>:/icon/resource/square-plus-solid-full.svg</normaloff>:/icon/resource/square-plus-solid-full.svg</iconset>
+   </property>
    <property name="text">
     <string>新建类(&amp;N)</string>
    </property>
@@ -138,6 +161,10 @@
    </property>
   </action>
   <action name="actionMember">
+   <property name="icon">
+    <iconset resource="img.qrc">
+     <normaloff>:/icon/resource/square-check-solid-full.svg</normaloff>:/icon/resource/square-check-solid-full.svg</iconset>
+   </property>
    <property name="text">
     <string>类成员(&amp;M)</string>
    </property>
@@ -151,6 +178,10 @@
    </property>
   </action>
   <action name="actionFind">
+   <property name="icon">
+    <iconset resource="img.qrc">
+     <normaloff>:/icon/resource/magnifying-glass-solid-full.svg</normaloff>:/icon/resource/magnifying-glass-solid-full.svg</iconset>
+   </property>
    <property name="text">
     <string>查找(&amp;F)</string>
    </property>
@@ -159,11 +190,33 @@
    </property>
   </action>
   <action name="actionDelete">
+   <property name="icon">
+    <iconset resource="img.qrc">
+     <normaloff>:/icon/resource/square-minus-solid-full.svg</normaloff>:/icon/resource/square-minus-solid-full.svg</iconset>
+   </property>
    <property name="text">
     <string>删除(&amp;D)</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+D</string>
+   </property>
+  </action>
+  <action name="actionCreate">
+   <property name="icon">
+    <iconset resource="img.qrc">
+     <normaloff>:/icon/resource/copy-solid-full.svg</normaloff>:/icon/resource/copy-solid-full.svg</iconset>
+   </property>
+   <property name="text">
+    <string>创造示例文件</string>
+   </property>
+  </action>
+  <action name="actionShow">
+   <property name="icon">
+    <iconset resource="img.qrc">
+     <normaloff>:/icon/resource/folder-open-solid-full.svg</normaloff>:/icon/resource/folder-open-solid-full.svg</iconset>
+   </property>
+   <property name="text">
+    <string>打开示例文件</string>
    </property>
   </action>
  </widget>

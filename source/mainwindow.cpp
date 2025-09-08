@@ -9,6 +9,7 @@
 #include <QFont>
 #include <header/deletewarn.h>
 #include <header/findforclass.h>
+#include <header/defaultnotice.h>
 
 MainWindow::MainWindow(QWidget *parent)
 	: QMainWindow(parent)
@@ -16,6 +17,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
 	ui->setupUi(this);
 	setWindowTitle(tr("面向对象程序项目管理系统"));//设置主页面标题
+
+	srand(time(0));//随机化
 
 	QFont font1, font2;
 	font1.setPointSize(14);
@@ -50,15 +53,15 @@ MainWindow::MainWindow(QWidget *parent)
 		connect(dateEditDelegate[i], &QAbstractItemDelegate::closeEditor,
 				this, &MainWindow::tableViewUpdate);
 		connect(tableView[i]->selectionModel(), &QItemSelectionModel::selectionChanged,
-				this, &MainWindow::onSelectionChanged);
+				this, &MainWindow::onSelectionChanged);//设置某些action的可选性
 		connect(tableView[i], &QTableView::doubleClicked,
-				this, &MainWindow::onDoubleClicked);
+				this, &MainWindow::onDoubleClicked);//双击单元格
 	}
 	setCentralWidget(tabWidget);
 
 	ui->actionMember->setEnabled(false);//初始为禁用状态
 	ui->actionDelete->setEnabled(false);
-
+	/*切页展示*/
 	connect(tabWidget, SIGNAL(currentChanged(int)), this, SLOT(onPageChanged()));
 }
 
@@ -137,7 +140,7 @@ void MainWindow::showClassInfoTable(int page)//刷新对应页面
 		model[page]->setItem(i, 4, new QStandardItem(tmpClass.getFunction()));
 		model[page]->setItem(i, 5, new QStandardItem(tmpClass.getDate()));
 		model[page]->item(i, 5)->setTextAlignment(Qt::AlignCenter);
-		model[page]->setItem(i, 6, new QStandardItem(tmpClass.getName()));
+		model[page]->setItem(i, 6, new QStandardItem(tmpClass.getAuthor()));
 	}
 }
 
@@ -322,4 +325,63 @@ void MainWindow::on_actionDelete_triggered()//删除classInfo
 			showClassInfoTable(1);
 		}
 	}
+}
+
+void MainWindow::on_actionCreate_triggered()
+{
+	// 获取exe所在目录
+	QString exeDir = QCoreApplication::applicationDirPath();
+	QString filePath = exeDir + "/example/example.txt";//构建输出文件路径
+	DefaultNotice Notice(this);
+
+	QFile file(filePath);
+	if(!file.open(QIODevice::WriteOnly | QIODevice::Text))
+	{
+		Notice.setContent("错误：无法创建文件!");
+		Notice.exec();
+		qDebug() << "错误：无法创建文件！";
+		return;
+	}
+	QStringList memType = {"数据", "函数"},
+			acc = {"公有", "私有", "保护"};
+	QTextStream stream(&file);
+	stream << 100 << endl;
+	for(int i = 1 ; i <= 100; ++i)
+	{
+		stream << i << endl << "Name" + QString::number(i) << endl
+			   << "BaseName" + QString::number(rand() % 10 + 1) << endl
+			   << "Function" + QString::number(i) << endl
+			   << rand() % 26 + 2000 << "/" << rand() % 12 + 1 << "/" << rand() % 28 + 1 <<endl
+			   << "Author" + QString::number(rand() % 10 + 1) << endl;
+		stream << i % 10 << endl;
+		for(int j = 1; j <= i % 10; ++j)
+		{
+			int type = rand() & 1;
+			stream << j << " name" + QString::number(j)
+				   << " " << memType[type] << " "
+				   << (type == 0 ? (rand() % 100 + 1)<<2 : 0) << " "
+				   << "YourType" + QString::number(rand() % 10 + 1)
+				   << " " << acc[rand() % 3] << endl;
+		}
+	}
+	file.close();
+	Notice.setContent("示例文件已写入:\n" + filePath);
+	Notice.exec();
+	qDebug() << "示例文件已写入：" << filePath;
+}
+
+void MainWindow::on_actionShow_triggered()
+{
+	QString filePath = QCoreApplication::applicationDirPath() + "/example/example.txt";
+	DefaultNotice Notice(this);
+	qDebug() << filePath <<endl;
+	if(!QFile::exists(filePath))
+	{
+		Notice.setContent("找不到示例文件!\n请使用\"创建示例文件\"功能。");
+		Notice.exec();
+		qDebug() << "找不到示例文件" << endl;
+		return;
+	}
+	m_InfoManager[0].readClassFromFile(filePath);
+	showClassInfoTable(0);
 }

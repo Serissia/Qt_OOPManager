@@ -68,6 +68,8 @@ checkMemDialog::checkMemDialog(QWidget *parent, const classInfo& classEdit) :
 	ui->ButtonDel->setEnabled(false);//初始设为禁用
 	connect(ui->tableView->selectionModel(), &QItemSelectionModel::selectionChanged,
 			this, &checkMemDialog::onSelectionChanged);
+	connect(ui->tableView, &QTableView::doubleClicked,
+			this, &checkMemDialog::onDoubleClicked);//双击单元格
 
 	if(m_class[0].getNum() != 0) showClassMemInfoTable();
 }
@@ -80,6 +82,17 @@ checkMemDialog::~checkMemDialog()
 QVector<classMemberInfo>& checkMemDialog::getMems()
 {
 	return m_class[0].getMems();
+}
+
+void checkMemDialog::onDoubleClicked(const QModelIndex &index)
+{
+	if(!index.isValid()||index.column() != 3) return;
+	int row = index.row();
+	if(ui->tableView->model()->index(row, 2).data().toString() == "函数")
+	{
+		model->setItem(row, 3, new QStandardItem(QString::number(0)));
+		return;
+	}
 }
 
 void checkMemDialog::showClassMemInfoTable()
