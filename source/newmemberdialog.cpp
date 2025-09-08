@@ -20,7 +20,10 @@ newmemberdialog::~newmemberdialog()
 void newmemberdialog::on_lineMem_activated(int index)
 {
 	if(index == 1)
+	{
 		ui->lineSpace->setEnabled(false);//函数类型无内存
+		ui->lineSpace->setValue(0);
+	}
 	else
 		ui->lineSpace->setEnabled(true);
 }

@@ -8,6 +8,7 @@
 #include <QStyledItemDelegate>
 #include <QStandardItemModel>
 #include <header/dateeditdelegate.h>
+#include <QtCharts>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -22,6 +23,7 @@ public:
 	~MainWindow();
 	void showClassInfoTable(int page);//展示所有classInfo
 	void FindClass(QVariant, int);
+	void initChart();//更新饼图
 
 private slots:
 	void on_actionOpen_triggered();//打开文件按钮
@@ -37,6 +39,8 @@ private slots:
 
 	void onDoubleClicked(const QModelIndex &index);//双击[查看详情]
 
+	void onPieSeriesClicked(QPieSlice* slice);
+
 	void on_actionMember_triggered();
 
 	void on_actionFind_triggered();
@@ -49,6 +53,8 @@ private slots:
 
 	void on_actionShow_triggered();
 
+	void on_actionCheck_triggered();
+
 private:
 	Ui::MainWindow *ui;
 	projectManager m_InfoManager[2];//0负责所有, 1负责搜索过后
@@ -60,5 +66,8 @@ private:
 
 	QTableView *tableView[2];
 	QTabWidget *tabWidget;
+
+	QPieSeries *pieCharts;
+	QChart *chart;
 };
 #endif // MAINWINDOW_H

@@ -46,6 +46,14 @@ int classInfo::getNum() const
 	return members.size();
 }
 
+int classInfo::getSize() const
+{
+	int sum = 0;
+	for(auto i:members)
+		sum += i.getSize();
+	return sum;
+}
+
 QSet<int>& classInfo::getAllId()
 {
 	return nums;

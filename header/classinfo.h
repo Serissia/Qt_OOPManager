@@ -18,6 +18,7 @@ public:
 	/*相关private成员读写*/
 	int getID()const;
 	int getNum()const;//获取类成员个数
+	int getSize()const;//获取总的内存字节数
 	QString getName()const;
 	QString getBaseName()const;
 	QString getFunction()const;

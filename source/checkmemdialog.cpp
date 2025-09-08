@@ -64,6 +64,8 @@ checkMemDialog::checkMemDialog(QWidget *parent, const classInfo& classEdit) :
 			this, &checkMemDialog::tableViewUpdate);
 	connect(comboBoxDelegate_Mem, &QAbstractItemDelegate::closeEditor,
 			this, &checkMemDialog::tableViewUpdate);
+	connect(spinBoxDelegate, &QAbstractItemDelegate::closeEditor,
+			this, &checkMemDialog::tableViewUpdate);
 
 	ui->ButtonDel->setEnabled(false);//初始设为禁用
 	connect(ui->tableView->selectionModel(), &QItemSelectionModel::selectionChanged,
@@ -139,23 +141,29 @@ void checkMemDialog::tableViewUpdate()//更新类成员的tableView
 	switch (col) {
 		case 1:
 			classMemUpd.setName(newData.toString());
-			if(classMemElse!=nullptr) classMemElse->setName(newData.toString());
+			if(classMemElse != nullptr) classMemElse->setName(newData.toString());
 			break;
 		case 2:
 			classMemUpd.setMemType(newData.toString());
-			if(classMemElse!=nullptr) classMemElse->setMemType(newData.toString());
+			if(classMemElse != nullptr) classMemElse->setMemType(newData.toString());
+			if(classMemUpd.getMemType() == "函数")
+			{
+				classMemUpd.setSize(0);
+				model->setItem(row, col + 1, new QStandardItem(QString::number(0)));
+				if(classMemElse != nullptr) classMemElse->setSize(0);
+			}
 			break;
 		case 3:
 			classMemUpd.setSize(newData.toInt());
-			if(classMemElse!=nullptr) classMemElse->setSize(newData.toInt());
+			if(classMemElse != nullptr) classMemElse->setSize(newData.toInt());
 			break;
 		case 4:
 			classMemUpd.setDataType(newData.toString());
-			if(classMemElse!=nullptr) classMemElse->setDataType(newData.toString());
+			if(classMemElse != nullptr) classMemElse->setDataType(newData.toString());
 			break;
 		case 5:
 			classMemUpd.setAcc(newData.toString());
-			if(classMemElse!=nullptr) classMemElse->setAcc(newData.toString());
+			if(classMemElse != nullptr) classMemElse->setAcc(newData.toString());
 			break;
 	}
 

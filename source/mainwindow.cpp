@@ -10,6 +10,11 @@
 #include <header/deletewarn.h>
 #include <header/findforclass.h>
 #include <header/defaultnotice.h>
+#include <vector>
+#include <algorithm>
+#include <utility>
+
+QT_CHARTS_USE_NAMESPACE
 
 MainWindow::MainWindow(QWidget *parent)
 	: QMainWindow(parent)
@@ -34,11 +39,35 @@ MainWindow::MainWindow(QWidget *parent)
 		model[i] = new QStandardItemModel(this);
 	}
 	tabWidget = new QTabWidget(this);
+
+	//饼状图
+	pieCharts = new QPieSeries(this);
+	connect(pieCharts, SIGNAL(clicked(QPieSlice*)),
+			this, SLOT(onPieSeriesClicked(QPieSlice*)));
+
+
+	//图表视图
+	chart = new QChart;
+	chart->setTitle("内存信息");
+//	chart->setTheme(QChart::ChartThemeDark);//设置暗黑主题
+	chart->titleFont().setBold(true);
+	chart->titleFont().setPointSize(20);
+	chart->font().setPointSize(18);
+	chart->legend()->setAlignment(Qt::AlignRight);
+	chart->legend()->setBackgroundVisible(false);
+
+	//加入绘画视图
+	QChartView* chartView = new QChartView(this);
+	chartView->setRenderHint(QPainter::Antialiasing);
+	chartView->setChart(chart);
+
 	/*设置标签页信息*/
 	tabWidget->setFont(font2);
 	tabWidget->addTab(tableView[0], "类信息");
 	tabWidget->addTab(tableView[1], "查找");
+	tabWidget->addTab(chartView, "内存信息");
 	tabWidget->setTabEnabled(1, false);
+	tabWidget->setTabEnabled(2, false);
 
 	for(int i = 0; i <= 1; ++i)
 	{
@@ -68,6 +97,12 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
 	delete ui;
+}
+
+//点击饼图
+void MainWindow::onPieSeriesClicked(QPieSlice* slice)
+{
+	slice->setExploded(!slice->isExploded());
 }
 
 void MainWindow::on_actionOpen_triggered()
@@ -112,8 +147,9 @@ void MainWindow::on_actionNew_triggered()
 	}
 }
 
-void MainWindow::showClassInfoTable(int page)//刷新对应页面
+void MainWindow::showClassInfoTable(int page)//刷新对应页面, page为0或1
 {
+	if(page > 1) return;
 	model[page]->clear();
 	model[page]->setColumnCount(7);
 	int rowNum = m_InfoManager[page].getNumber();
@@ -176,11 +212,19 @@ void MainWindow::onPageChanged()
 		ui->actionDelete->setEnabled(false);
 		showClassInfoTable(1);
 	}
+	else if(tabWidget->currentIndex() == 2)
+	{
+		qDebug() << "切换至第三页" << endl;
+		ui->actionMember->setEnabled(false);
+		ui->actionDelete->setEnabled(false);
+		initChart();
+	}
 }
 
 void MainWindow::tableViewUpdate()
 {
 	int page = tabWidget->currentIndex();
+	if(page > 1) return;
 	QModelIndex modelIndex = tableView[page]->currentIndex();
 	if(!modelIndex.isValid()) return;
 
@@ -224,6 +268,7 @@ void MainWindow::tableViewUpdate()
 void MainWindow::on_actionMember_triggered()//编辑某个classInfo的类成员
 {
 	int page = tabWidget->currentIndex();
+	if(page > 1) return;
 	QModelIndex modelIndex = tableView[page]->currentIndex();
 	if(!modelIndex.isValid()) return;
 	classInfo &classChosen = m_InfoManager[page].getClassInfoByRow(modelIndex.row());
@@ -250,6 +295,7 @@ void MainWindow::onDoubleClicked(const QModelIndex &index)
 {
 	if(!index.isValid()||index.column() != 2) return;
 	int page = tabWidget->currentIndex();
+	if(page > 1) return;
 	classInfo &classChosen = m_InfoManager[page].getClassInfoByRow(index.row());
 	classInfo *classElse = m_InfoManager[!page].findClassById(classChosen.getID());
 
@@ -306,6 +352,7 @@ void MainWindow::FindClass(QVariant goal, int chosen)
 void MainWindow::on_actionDelete_triggered()//删除classInfo
 {
 	int page = tabWidget->currentIndex();
+	if(page > 1) return;
 	QModelIndex modelIndex = tableView[page]->currentIndex();
 	if(!modelIndex.isValid()) return;
 	classInfo &classChosen = m_InfoManager[page].getClassInfoByRow(modelIndex.row());
@@ -384,4 +431,85 @@ void MainWindow::on_actionShow_triggered()
 	}
 	m_InfoManager[0].readClassFromFile(filePath);
 	showClassInfoTable(0);
+}
+
+void MainWindow::initChart()
+{
+//	//定义各扇形切片的颜色
+//	static const QStringList list_pie_color = {
+//		"#6480D6","#A1DC85","#FFAD25","#FF7777","#84D1EF","#4CB383",
+//	};
+
+	std::vector<std::pair<int, int> > memberSize;
+	for(int i = 0; i < m_InfoManager[0].getNumber(); ++i)
+		memberSize.push_back(std::make_pair(i,
+							m_InfoManager[0].getClassInfoByRow(i).getSize()));
+
+	int chartNum = memberSize.size();
+	std::sort(memberSize.begin(),memberSize.end(),
+	[](const std::pair<int, int>& a, const std::pair<int, int>& b){ return a.second > b.second; });
+
+	if(memberSize[0].second == 0)
+	{
+		DefaultNotice Notice(this);
+		Notice.setContent("所有的类所用内存字节数都为0！");
+		Notice.exec();
+		return;
+	}
+
+//	int otherSize = -1;
+//	if(chartNum > 6)
+//	{
+//		otherSize = 0;
+//		for(int i = 0; i < 5; ++i)
+//			otherSize -= memberSize[i].second;
+//		for(auto i:memberSize)
+//			otherSize += i.second;
+//	}
+
+	//刷新饼图
+	pieCharts->clear();
+	for (int i = 0; i < (chartNum > 10 ? 10 : chartNum); i++)
+	{
+		QPieSlice* pie_slice = new QPieSlice(this);
+		pie_slice->setLabelVisible(true);
+		pie_slice->setValue(memberSize[i].second);
+		pie_slice->setLabel(QString::number(memberSize[i].second));
+//		pie_slice->setColor(list_pie_color[i]);
+//		pie_slice->setLabelColor(list_pie_color[i]);
+//		pie_slice->setBorderColor(list_pie_color[i]);
+		pieCharts->append(pie_slice);
+	}
+	chart->addSeries(pieCharts);
+	//更改图例
+	for (int i = 0; i < (chartNum > 10 ? 10 : chartNum); i++)
+		chart->legend()->markers().at(i)
+				->setLabel(m_InfoManager[0].getClassInfoByRow(memberSize[i].first).getName());
+
+//	if(chartNum > 6)
+//	{
+//		QPieSlice* pie_slice = new QPieSlice(this);
+//		pie_slice->setLabelVisible(true);
+//		pie_slice->setValue(otherSize);
+//		pie_slice->setLabel(QString::number(otherSize));
+////		pie_slice->setColor(list_pie_color[5]);
+////		pie_slice->setLabelColor(list_pie_color[5]);
+////		pie_slice->setBorderColor(list_pie_color[5]);
+//		pieCharts->append(pie_slice);
+//		chart->legend()->markers(pieCharts)[5]->setLabel("其他");
+//	}
+}
+
+void MainWindow::on_actionCheck_triggered()//查看内存信息
+{
+	if(m_InfoManager[0].getNumber() == 0)
+	{
+		DefaultNotice Notice(this);
+		Notice.setContent("该项目下没有类，请新增后再试！");
+		Notice.exec();
+		return;
+	}
+	tabWidget->setTabEnabled(2, true);
+	initChart();
+	tabWidget->setCurrentIndex(2);//跳转
 }
