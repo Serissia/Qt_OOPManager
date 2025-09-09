@@ -15,6 +15,11 @@ DeleteWarn::~DeleteWarn()
 	delete ui;
 }
 
+void DeleteWarn::setContent(const QString content)
+{
+	ui->label->setText(content);
+}
+
 void DeleteWarn::on_pushButton_clicked()
 {
 	accept();

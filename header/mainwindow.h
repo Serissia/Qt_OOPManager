@@ -55,6 +55,8 @@ private slots:
 
 	void on_actionCheck_triggered();
 
+	void on_actionBlank_triggered();
+
 private:
 	Ui::MainWindow *ui;
 	projectManager m_InfoManager[2];//0负责所有, 1负责搜索过后

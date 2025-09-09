@@ -68,6 +68,7 @@
      <addaction name="actionCreate"/>
      <addaction name="actionShow"/>
     </widget>
+    <addaction name="actionBlank"/>
     <addaction name="actionOpen"/>
     <addaction name="actionSave"/>
     <addaction name="separator"/>
@@ -109,6 +110,7 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actionBlank"/>
    <addaction name="actionOpen"/>
    <addaction name="actionSave"/>
    <addaction name="actionNew"/>
@@ -233,6 +235,18 @@
    </property>
    <property name="text">
     <string>内存信息(...)</string>
+   </property>
+  </action>
+  <action name="actionBlank">
+   <property name="icon">
+    <iconset resource="img.qrc">
+     <normaloff>:/icon/resource/file-regular-full.svg</normaloff>:/icon/resource/file-regular-full.svg</iconset>
+   </property>
+   <property name="text">
+    <string>新建空白工程(&amp;B)</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+B</string>
    </property>
   </action>
  </widget>

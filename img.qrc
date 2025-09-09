@@ -14,5 +14,6 @@
         <file>resource/flag-checkered-solid-full.svg</file>
         <file>resource/list-check-solid-full.svg</file>
         <file>resource/chart-pie-solid-full.svg</file>
+        <file>resource/file-regular-full.svg</file>
     </qresource>
 </RCC>

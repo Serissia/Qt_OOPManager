@@ -10,6 +10,7 @@ newmemberdialog::newmemberdialog(QWidget *parent,
 {
 	ui->setupUi(this);
 	setWindowTitle(tr("新增类成员"));
+	setFixedSize(600, 700);//固定窗口大小
 }
 
 newmemberdialog::~newmemberdialog()

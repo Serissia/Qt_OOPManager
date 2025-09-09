@@ -15,6 +15,8 @@ public:
 	explicit DeleteWarn(QWidget *parent = nullptr);
 	~DeleteWarn();
 
+	void setContent(const QString content);
+
 private slots:
 	void on_pushButton_clicked();
 

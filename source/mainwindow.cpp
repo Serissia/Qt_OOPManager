@@ -513,3 +513,19 @@ void MainWindow::on_actionCheck_triggered()//查看内存信息
 	initChart();
 	tabWidget->setCurrentIndex(2);//跳转
 }
+
+void MainWindow::on_actionBlank_triggered()//新建空白
+{
+	if(m_InfoManager[0].getNumber() > 0)
+	{
+		DeleteWarn dlgWarn(this);
+		dlgWarn.setContent("您还没有保存当前工程，是否保存？");
+		int res = dlgWarn.exec();
+		if(res == QDialog::Accepted)
+			on_actionSave_triggered();
+	}
+
+	for(int i = 0; i <= 1; ++i)
+		m_InfoManager[i].clear();
+	showClassInfoTable(0);
+}
